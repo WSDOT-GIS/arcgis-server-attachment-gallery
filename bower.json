@@ -1,0 +1,27 @@
+{
+  "name": "arcgis-server-attachment-gallery",
+  "version": "0.0.0",
+  "authors": [
+    "WSDOT"
+  ],
+  "description": "Shows ArcGIS Server features' attachments in a gallery control",
+  "keywords": [
+    "ArcGIS",
+    "gallery",
+    "carousel",
+    "attachment"
+  ],
+  "license": "Unlicense",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "*.csproj",
+    "*.sln"
+  ],
+  "dependencies": {
+    "blueimp-gallery": "~2.15.2"
+  }
+}
