@@ -3,3 +3,21 @@
     height: 100px;
     background-size: cover;
 }
+
+.attributes {
+    display: none;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    color: white;
+    background-color: RGBA(0,0,0,0.6);
+    margin: 0.5em 0.5em 0 0;
+    padding: 0.5em;
+    border-bottom-left-radius: 10px;
+}
+
+.blueimp-gallery-controls .attributes {
+    display: block;
+}

@@ -22,6 +22,7 @@
     "*.sln"
   ],
   "dependencies": {
-    "blueimp-gallery": "~2.15.2"
+    "blueimp-gallery": "~2.15.2",
+    "promises": "~1.0.10"
   }
 }

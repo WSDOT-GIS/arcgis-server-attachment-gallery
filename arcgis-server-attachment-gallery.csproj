@@ -41,6 +41,7 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="attributesToDom.js" />
     <Content Include="bower.json" />
     <Content Include="bower_components\blueimp-gallery\css\blueimp-gallery.min.css" />
     <Content Include="bower_components\blueimp-gallery\img\error.png" />
@@ -52,6 +53,8 @@
     <Content Include="bower_components\blueimp-gallery\img\video-play.svg" />
     <Content Include="bower_components\blueimp-gallery\js\blueimp-gallery.js" />
     <Content Include="bower_components\blueimp-gallery\js\blueimp-gallery.min.js" />
+    <Content Include="bower_components\promises\promise.js" />
+    <Content Include="bower_components\setImmediate\setimmediate.js" />
     <Content Include="index.css" />
     <Content Include="index.html" />
     <Content Include="index.js" />
