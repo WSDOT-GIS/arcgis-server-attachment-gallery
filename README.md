@@ -14,7 +14,10 @@ Create a link to the `index.html` page and then add a [fragment identifier] with
 
 Unless otherwise noted below, all code is in the public domain (See http://unlicense.org).
 
-* The [Blueimp Gallery] component referenced by this project is licensed under the MIT License.
+The following referenced components are licensed under the [MIT License](http://mit-license.org/):
+
+* [Blueimp Gallery]
+* [Octane/Promise](https://github.com/Octane/Promise) polyfill
 
 [Blueimp Gallery]:http://blueimp.github.io/Gallery/
 [fragment identifier]:http://en.wikipedia.org/wiki/Fragment_identifier
