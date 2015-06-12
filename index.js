@@ -22,7 +22,7 @@
 
 	var setupGallery = function (e) {
 		var request = e.target || e.currentTarget;
-		var responseUrl = request.responseURL.replace(/\?.+$/, ""); // remove query string / search.
+		var responseUrl = attachmentsUrl.replace(/\?.+$/, ""); // remove query string / search.
 		var galleryData = JSON.parse(request.responseText);
 		console.log(galleryData);
 
