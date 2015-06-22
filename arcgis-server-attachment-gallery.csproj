@@ -59,6 +59,7 @@
     <Content Include="index.html" />
     <Content Include="index.js" />
     <Content Include="UNLICENSE" />
+    <Content Include="urlSearchUtils.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="README.md" />
