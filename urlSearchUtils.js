@@ -39,7 +39,7 @@
 		var pair, key, value;
 
 		for (var i = 0, l = pairs.length; i < l; i += 1) {
-			pair = pairs[0].split("=");
+			pair = pairs[i].split("=");
 			key = pair[0];
 			value = decodeURIComponent(pair[1]);
 			output[key] = value;

@@ -44,13 +44,14 @@
 		/**
 		 * Converts feature attributes object into a table.
 		 * @param {Object} attributes
+		 * @param {string[]} [fields]
 		 * @returns {HTMLTableElement}
 		 */
-		objectToTable: function (attributes) {
+		objectToTable: function (attributes, fields) {
 			var table = document.createElement("table");
-			var row, cell, value;
+			var row, cell, value, i, l, name;
 
-			for (var name in attributes) {
+			var addRow = function (name) {
 				if (attributes.hasOwnProperty(name)) {
 					value = attributes[name];
 
@@ -72,7 +73,24 @@
 
 					table.appendChild(row);
 				}
+			};
+
+			if (fields) {
+				for (i = 0, l = fields.length; i < l; i += 1) {
+					name = fields[i];
+					if (attributes.hasOwnProperty(name)) {
+						addRow(name);
+					}
+				}
+			} else {
+				for (name in attributes) {
+					if (attributes.hasOwnProperty(name)) {
+						addRow(name);
+					}
+				}
 			}
+
+
 			return table;
 		},
 

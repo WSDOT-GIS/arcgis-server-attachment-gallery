@@ -118,7 +118,6 @@
 						output[field.alias || field.name] = value;
 					}
 				});
-
 				resolve(output);
 			}, function (error) {
 				reject(error);
@@ -128,6 +127,8 @@
 	}
 
 	var qsParams = urlSearchUtils.searchToObject();
+	var fieldOrder = qsParams.fields ? qsParams.fields.split(",") : null;
+	console.log("qsParams", qsParams);
 	var featureUrlRe = /\/\w+Server\/\d+\/\d+/i;
 	var featureUrl;
 	var layerUrl;
@@ -154,7 +155,7 @@
 		if (attachmentsUrl) {
 
 			getAttributes().then(function (attributes) {
-				var table = attributesToDom.objectToTable(attributes);
+				var table = attributesToDom.objectToTable(attributes, fieldOrder);
 				table.classList.add("attributes");
 				var caption = document.createElement("caption");
 				caption.textContent = "Feature Attributes";
