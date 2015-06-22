@@ -1,7 +1,8 @@
 ﻿/// <reference path="bower_components/blueimp-gallery/js/blueimp-gallery.js" />
 /// <reference path="C:\Users\jacobsj\Documents\GitHub\arcgis-server-attachment-gallery\attributesToDom.js" />
+/// <reference path="C:\Users\jacobsj\Documents\GitHub\arcgis-server-attachment-gallery\urlSearchUtils.js" />
 
-/*global blueimp, attributesToDom*/
+/*global blueimp, attributesToDom, urlSearchUtils*/
 
 /**
  * @external AttachmentInfos
@@ -117,7 +118,6 @@
 						output[field.alias || field.name] = value;
 					}
 				});
-
 				resolve(output);
 			}, function (error) {
 				reject(error);
@@ -125,56 +125,63 @@
 		});
 		return promise;
 	}
+
+	var qsParams = urlSearchUtils.searchToObject();
+	var fieldOrder = qsParams.fields ? qsParams.fields.split(",") : null;
+	console.log("qsParams", qsParams);
 	var featureUrlRe = /\/\w+Server\/\d+\/\d+/i;
-	var featureUrl = location.hash;
+	var featureUrl;
 	var layerUrl;
 	var attachmentsUrl;
 	var gallery;
-	if (featureUrl) {
-		// Remove the hash from beginning of string.
-		featureUrl = featureUrl.replace(/^#/, "");
+
+	if (qsParams) {
+
+		featureUrl = qsParams.url;
+
+
 		// Test to see if URL is a feature URL.
-		if (featureUrlRe.test(featureUrl)) {
+		if (featureUrl && featureUrlRe.test(featureUrl)) {
 			layerUrl = featureUrl.replace(/\/\d+\/?$/, "");
 
 			if (!/\/attachments\/?/i.test(featureUrl)) {
 				attachmentsUrl = featureUrl.replace(/\/?$/, "/attachments");
 			}
 		}
-	}
 
 
 
-	var request;
-	if (attachmentsUrl) {
+		var request;
+		if (attachmentsUrl) {
 
-		getAttributes().then(function (attributes) {
-			var table = attributesToDom.objectToTable(attributes);
-			table.classList.add("attributes");
-			var caption = document.createElement("caption");
-			caption.textContent = "Feature Attributes";
-			table.insertBefore(caption, table.firstChild);
-			document.getElementById("blueimp-gallery").appendChild(table);
-		}, function (error) {
-			console.error(error);
-		});
-
-		getAttachmentInfo().then(function (attachmentInfos) {
-			var responseUrl = attachmentsUrl.replace(/\?.+$/, ""); // remove query string / search.
-			var galleryData = attachmentInfos.map(function (item) {
-				var attachmentUrl = [responseUrl, item.id].join("/");
-				return {
-					title: item.name,
-					href: attachmentUrl,
-					type: item.contentType || null,
-					thumbnail: attachmentUrl
-				};
+			getAttributes().then(function (attributes) {
+				var table = attributesToDom.objectToTable(attributes, fieldOrder);
+				table.classList.add("attributes");
+				var caption = document.createElement("caption");
+				caption.textContent = "Feature Attributes";
+				table.insertBefore(caption, table.firstChild);
+				document.getElementById("blueimp-gallery").appendChild(table);
+			}, function (error) {
+				console.error(error);
 			});
 
-			gallery = blueimp.Gallery(galleryData, {
-				carousel: true
+			getAttachmentInfo().then(function (attachmentInfos) {
+				var responseUrl = attachmentsUrl.replace(/\?.+$/, ""); // remove query string / search.
+				var galleryData = attachmentInfos.map(function (item) {
+					var attachmentUrl = [responseUrl, item.id].join("/");
+					return {
+						title: item.name,
+						href: attachmentUrl,
+						type: item.contentType || null,
+						thumbnail: attachmentUrl
+					};
+				});
+
+				gallery = blueimp.Gallery(galleryData, {
+					carousel: true
+				});
 			});
-		});
+		}
 	}
 
 }());
