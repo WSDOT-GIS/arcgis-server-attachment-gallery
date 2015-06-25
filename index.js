@@ -1,8 +1,10 @@
 ﻿/// <reference path="bower_components/blueimp-gallery/js/blueimp-gallery.js" />
 /// <reference path="C:\Users\jacobsj\Documents\GitHub\arcgis-server-attachment-gallery\attributesToDom.js" />
 /// <reference path="C:\Users\jacobsj\Documents\GitHub\arcgis-server-attachment-gallery\urlSearchUtils.js" />
+/// <reference path="C:\Users\jacobsj\Documents\GitHub\arcgis-server-attachment-gallery\bower_components/blueimp-load-image/js/load-image.js" />
+/// <reference path="C:\Users\jacobsj\Documents\GitHub\arcgis-server-attachment-gallery\bower_components/blueimp-load-image/js/load-image-exif.js" />
 
-/*global blueimp, attributesToDom, urlSearchUtils*/
+/*global blueimp, attributesToDom, urlSearchUtils, loadImage */
 
 /**
  * @external AttachmentInfos
@@ -10,6 +12,44 @@
  */
 
 (function () {
+
+	/**
+	 * Gets image's ImageDescription EXIF property (if available).
+	 * @param {string} url - Image URL.
+	 * @returns {Promise} - Resolve function parameter contains the text of the ImageDescription if available or undefined otherwise.
+	 */
+	function getImageDescription(url) {
+		var promise = new Promise(function (resolve, reject) {
+			var request = new XMLHttpRequest();
+			request.open("get", url);
+			request.responseType = "blob";
+			request.onloadend = function () {
+				if (this.status === 200) {
+					try {
+						loadImage.parseMetaData(this.response, function (data) {
+							var newTitle;
+							try {
+								newTitle = data.exif.get("ImageDescription");
+								resolve(newTitle);
+							} catch (err) {
+								reject(err);
+							}
+						}, {
+							parseMetadata: true
+						});
+					} catch (e) {
+						reject(e);
+					}
+				} else {
+					reject(this);
+				}
+			};
+			request.send();
+		});
+		return promise;
+	}
+
+
 	/**
 	 * 
 	 * @returns {Promise}
@@ -128,7 +168,6 @@
 
 	var qsParams = urlSearchUtils.searchToObject();
 	var fieldOrder = qsParams.fields ? qsParams.fields.split(",") : null;
-	console.log("qsParams", qsParams);
 	var featureUrlRe = /\/\w+Server\/\d+\/\d+/i;
 	var featureUrl;
 	var layerUrl;
@@ -169,16 +208,30 @@
 				var responseUrl = attachmentsUrl.replace(/\?.+$/, ""); // remove query string / search.
 				var galleryData = attachmentInfos.map(function (item) {
 					var attachmentUrl = [responseUrl, item.id].join("/");
-					return {
+					var data = {
 						title: item.name,
 						href: attachmentUrl,
 						type: item.contentType || null,
 						thumbnail: attachmentUrl
 					};
+
+					
+
+					return data;
 				});
 
 				gallery = blueimp.Gallery(galleryData, {
-					carousel: true
+					carousel: true,
+					onslidecomplete: function (index, slide) {
+						// Callback function executed on slide content load.
+						var img = slide.querySelector("img");
+
+						// Change the title to the EXIF title if available.
+						getImageDescription(img.src).then(function (title) {
+							img.title = title || img.title;
+						});
+
+					}
 				});
 			});
 		}

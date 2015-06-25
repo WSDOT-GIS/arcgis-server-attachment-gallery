@@ -23,6 +23,7 @@
   ],
   "dependencies": {
     "blueimp-gallery": "~2.15.2",
-    "promises": "~1.0.10"
+    "promises": "~1.0.10",
+    "blueimp-load-image": "~1.13.0"
   }
 }
