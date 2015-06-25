@@ -17,8 +17,10 @@ Unless otherwise noted below, all code is in the public domain (See http://unlic
 The following referenced components are licensed under the [MIT License](http://mit-license.org/):
 
 * [Blueimp Gallery]
+* [Blueimp JavaScript Load Image]
 * [Octane/Promise](https://github.com/Octane/Promise) polyfill
 
 [Blueimp Gallery]:http://blueimp.github.io/Gallery/
+[Blueimp JavaScript Load Image]:https://blueimp.github.io/JavaScript-Load-Image/
 [fragment identifier]:http://en.wikipedia.org/wiki/Fragment_identifier
 [feature URL]:http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/Feature_Map_Service_Layer/02r3000000r9000000/
