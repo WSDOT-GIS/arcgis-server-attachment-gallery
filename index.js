@@ -16,7 +16,7 @@
 	/**
 	 * Gets image's ImageDescription EXIF property (if available).
 	 * @param {string} url - Image URL.
-	 * @returns {Promise} - Resolve function parameter contains the text of the ImageDescription if available or undefined otherwise.
+	 * @returns {Promise} - Resolve function parameter contains the text of the ImageDescription if available or null otherwise.
 	 */
 	function getImageDescription(url) {
 		var promise = new Promise(function (resolve, reject) {
@@ -29,7 +29,7 @@
 						loadImage.parseMetaData(this.response, function (data) {
 							var newTitle;
 							try {
-								newTitle = data.exif.get("ImageDescription");
+								newTitle = data.exif ? data.exif.get("ImageDescription") : null;
 								resolve(newTitle);
 							} catch (err) {
 								reject(err);
@@ -206,6 +206,9 @@
 
 			getAttachmentInfo().then(function (attachmentInfos) {
 				var responseUrl = attachmentsUrl.replace(/\?.+$/, ""); // remove query string / search.
+
+				var exifPromises = [];
+
 				var galleryData = attachmentInfos.map(function (item) {
 					var attachmentUrl = [responseUrl, item.id].join("/");
 					var data = {
@@ -215,23 +218,26 @@
 						thumbnail: attachmentUrl
 					};
 
-					
+					var promise = getImageDescription(attachmentUrl);
+					exifPromises.push(promise);
 
 					return data;
 				});
 
-				gallery = blueimp.Gallery(galleryData, {
-					carousel: true,
-					onslidecomplete: function (index, slide) {
-						// Callback function executed on slide content load.
-						var img = slide.querySelector("img");
+				function createGallery() {
+					return blueimp.Gallery(galleryData, {
+						carousel: true
+					});
+				}
 
-						// Change the title to the EXIF title if available.
-						getImageDescription(img.src).then(function (title) {
-							img.title = title || img.title;
-						});
-
-					}
+				Promise.all(exifPromises).then(function (titles) {
+					galleryData.forEach(function (gd, i) {
+						gd.title = titles[i] || gd.title;
+					});
+					gallery = createGallery();
+				}, function (error) {
+					console.error("Error getting EXIF data", error);
+					gallery = createGallery();
 				});
 			});
 		}
