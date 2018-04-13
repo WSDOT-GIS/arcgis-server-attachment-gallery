@@ -8,7 +8,7 @@ An HTML page that displays the attachments of an ArcGIS Server Map/Feature Servi
 Create a link to the `index.html` page and then add a [fragment identifier] with a [feature URL].
 
 ### Example ###
-`http://wsdot-gis.github.io/arcgis-server-attachment-gallery/#http://example.com/ArcGIS/rest/services/MyOptionalFolder/MyService/MapServer/0/5`
+`http://wsdot-gis.github.io/arcgis-server-attachment-gallery/?url=http://example.com/ArcGIS/rest/services/MyOptionalFolder/MyService/MapServer/0/5`
 
 ## License ##
 
